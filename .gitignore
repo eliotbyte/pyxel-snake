@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.py[cod]
+*.pyxapp
+*.exe
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# local sandbox / AI — not for repo
+pyxel_examples/
+AGENTS.md
