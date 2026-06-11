@@ -4,12 +4,17 @@ from enum import Enum, auto
 
 from crumbs import FruitCrumb, spawn_bite_crumbs
 from iso import mouth_screen_pos, screen_dist_for_eat
-from sprites import BOB_AMP, BALL_GIANT, BODY_BALLS, HOVER_LIFT, SHADOW_BIG, SHADOW_MED, shadow_for_bob
+from sprites import BOB_AMP, HOVER_LIFT, SHADOW_BIG, SHADOW_MED, shadow_for_bob
 from world import WORLD_SIZE, toroidal_delta, toroidal_dist, wrap_pos
 
 SNAKE_SPEED = 10.0
 TURN_SPEED = 120.0
 SEGMENT_SPACING = 2
+# Visual width in px per tail sprite index (0,1 = reserved; 2 = tail_02 … 5 = tail_05).
+TAIL_SPRITE_WIDTHS = (0, 14, 12, 8, 6, 4)
+TAIL_SPRITE_MIN = 2
+TAIL_SPRITE_MAX = 5
+TAIL_DIGEST = 0
 WAVE_AMP = 1.4
 WAVE_PERIOD = 1.5
 WAVE_SEGMENT_PHASE = 1.0
@@ -202,7 +207,7 @@ class Snake:
         self.segments: list[tuple[float, float]] = []
         rad = math.radians(self.heading_deg)
         for i in range(num_segments):
-            back = (i + 1) * SEGMENT_SPACING
+            back = self.segment_arc_distance_at(i, num_segments)
             sx = self.head_x - math.cos(rad) * back
             sy = self.head_y - math.sin(rad) * back
             self.segments.append(wrap_pos(sx, sy))
@@ -214,8 +219,6 @@ class Snake:
         self.eating_fruit_kind: int | None = None
         self.eating_fruit_sx = 0.0
         self.eating_fruit_sy = 0.0
-        self.eating_fruit_wx = 0.0
-        self.eating_fruit_wy = 0.0
         self.eating_fruit_arrived = False
         self._eating_shrink_elapsed = 0.0
         self._eating_shrink_duration = 0.36
@@ -243,16 +246,66 @@ class Snake:
         else:
             self._digest_items.append(DigestItem(0.0))
 
-    def segment_ball(self, seg_i: int) -> int:
-        base = BODY_BALLS[min(seg_i, len(BODY_BALLS) - 1)]
+    @staticmethod
+    def _tail_sprite_width(tail_index: int) -> float:
+        idx = max(TAIL_SPRITE_MIN, min(tail_index, len(TAIL_SPRITE_WIDTHS) - 1))
+        return float(TAIL_SPRITE_WIDTHS[idx])
+
+    def segment_gap_before(self, seg_i: int, num_segments: int) -> float:
+        curr_idx = self._segment_tail_base_index_at(seg_i, num_segments)
+        if seg_i == 0:
+            return SEGMENT_SPACING
+        prev_idx = self._segment_tail_base_index_at(seg_i - 1, num_segments)
+        prev_w = self._tail_sprite_width(prev_idx)
+        curr_w = self._tail_sprite_width(curr_idx)
+        base_w = float(TAIL_SPRITE_WIDTHS[TAIL_SPRITE_MIN])
+        return SEGMENT_SPACING * (prev_w + curr_w) / (2.0 * base_w)
+
+    def _segment_tail_base_index_at(self, seg_i: int, num_segments: int) -> int:
+        usable = TAIL_SPRITE_MAX - TAIL_SPRITE_MIN + 1
+        if num_segments <= usable:
+            return TAIL_SPRITE_MIN + seg_i
+        t = seg_i / max(1, num_segments - 1)
+        if t < 0.35:
+            tier = 1
+        elif t < 0.55:
+            tier = 2
+        else:
+            u = (t - 0.55) / 0.45
+            tier = 3 + min(2, int(u * 2.99))
+        return min(TAIL_SPRITE_MAX, tier + TAIL_SPRITE_MIN - 1)
+
+    def segment_arc_distance_at(self, seg_i: int, num_segments: int) -> float:
+        return sum(self.segment_gap_before(i, num_segments) for i in range(seg_i + 1))
+
+    def segment_arc_distance(self, seg_i: int) -> float:
+        return self.segment_arc_distance_at(seg_i, len(self.segments))
+
+    def _segment_tail_base_index(self, seg_i: int) -> int:
+        return self._segment_tail_base_index_at(seg_i, len(self.segments))
+
+    def _is_digesting_segment(self, seg_i: int) -> bool:
         n = len(self.segments)
         for item in self._digest_items:
             if item.segment_index(n) == seg_i:
-                return BALL_GIANT
+                return True
+        return False
+
+    def segment_tail_index(self, seg_i: int) -> int:
+        base = self._segment_tail_base_index(seg_i)
+        if self._is_digesting_segment(seg_i):
+            dig = base - 1
+            return TAIL_DIGEST if dig < TAIL_SPRITE_MIN else dig
         return base
 
+    def segment_draws_shadow(self, seg_i: int) -> bool:
+        tail_idx = self.segment_tail_index(seg_i)
+        if tail_idx <= TAIL_SPRITE_MIN + 1:
+            return True
+        return seg_i % 2 == 0
+
     def segment_shadow(self, seg_i: int, bob: float) -> int:
-        base = SHADOW_BIG if self.segment_ball(seg_i) == BALL_GIANT else SHADOW_MED
+        base = SHADOW_BIG if self.segment_tail_index(seg_i) == TAIL_DIGEST else SHADOW_MED
         return shadow_for_bob(base, bob)
 
     def _update_digest(self, dt: float) -> None:
@@ -282,15 +335,20 @@ class Snake:
     def _seed_path(self) -> None:
         self._path.append(self.head_x, self.head_y, self.heading_deg, 0.0)
         rad = math.radians(self.heading_deg)
-        for i in range(1, len(self.segments) + 2):
-            back = i * SEGMENT_SPACING
+        n = len(self.segments)
+        for i in range(1, n + 2):
+            if i <= n:
+                back = self.segment_arc_distance_at(i - 1, n)
+            else:
+                back = self.segment_arc_distance_at(n - 1, n) + (i - n) * SEGMENT_SPACING
             sx = self.head_x - math.cos(rad) * back
             sy = self.head_y - math.sin(rad) * back
             self._path.append(sx, sy, self.heading_deg, 0.0)
 
     def grow(self, n: int = 1) -> None:
         for _ in range(n):
-            dist = (len(self.segments) + 1) * SEGMENT_SPACING
+            new_i = len(self.segments)
+            dist = self.segment_arc_distance_at(new_i, new_i + 1)
             pos = self._path.sample_pos(dist, 1.0)
             if pos is None:
                 if self.segments:
@@ -384,7 +442,7 @@ class Snake:
     def _update_segments(self) -> None:
         front_x, front_y = self.head_x, self.head_y
         for i in range(len(self.segments)):
-            dist = (i + 1) * SEGMENT_SPACING
+            dist = self.segment_arc_distance(i)
             seg_index = i + 1
             pos = self._path.sample_pos(dist, self._amplitude_scale(seg_index))
             if pos is not None:
@@ -464,11 +522,15 @@ class Snake:
                 if self.eating_fruit_kind is not None:
                     spawn_bite_crumbs(
                         self.eat_crumbs,
-                        self.eating_fruit_wx,
-                        self.eating_fruit_wy,
+                        self.head_x,
+                        self.head_y,
                         self.eating_fruit_kind,
                         bite,
                         cam_deg,
+                        self.heading_deg,
+                        self.move_speed,
+                        focus_x,
+                        focus_y,
                     )
             if finished:
                 self.mouth_state = MouthState.CLOSED
@@ -493,7 +555,6 @@ class Snake:
             self.mouth_state = MouthState.EATING
             self.eating_fruit_index = nearest_i
             self.eating_fruit_kind = fruit.kind
-            self.eating_fruit_wx, self.eating_fruit_wy = fruit.wx, fruit.wy
             self.eating_fruit_sx, self.eating_fruit_sy = fruit_sx, fruit_sy
             self.eating_fruit_arrived = False
             mouth_sx, mouth_sy = mouth_screen_pos(

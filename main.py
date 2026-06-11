@@ -14,7 +14,7 @@ from sprites import (
     FRUIT_HOVER_LIFT,
     SHADOW_BIG,
     bob_y_offset,
-    draw_ball,
+    draw_tail,
     draw_bubble,
     draw_fruit,
     draw_fruit_quarter,
@@ -32,6 +32,9 @@ class App:
     def __init__(self):
         pyxel.init(256, 200, title="Iso Snake", fps=60)
         pyxel.load("assets/snake.pyxres")
+        from sprites import init_atlas
+
+        init_atlas("assets/snake.manifest.json")
         iso.init_screen_center(pyxel.width, pyxel.height)
 
         self.last_time = time.perf_counter()
@@ -104,12 +107,13 @@ class App:
         sh: int,
     ) -> None:
         for seg_i, (wx, wy) in enumerate(snake.segments):
-            ball = snake.segment_ball(seg_i)
+            tail_idx = snake.segment_tail_index(seg_i)
             seg_index = seg_i + 1
             for sx, sy in iter_screen_positions(wx, wy, focus_x, focus_y, cam, screen_w=sw, screen_h=sh):
                 bob = snake.wave_bob_offset(seg_index)
-                drawables.append((sy, "shadow", (sx, sy, snake.segment_shadow(seg_i, bob)), None))
-                drawables.append((sy, "ball", (sx, snake.hover_screen_y(sy, seg_index), ball), None))
+                if snake.segment_draws_shadow(seg_i):
+                    drawables.append((sy, "shadow", (sx, sy, snake.segment_shadow(seg_i, bob)), None))
+                drawables.append((sy, "tail", (sx, snake.hover_screen_y(sy, seg_index), tail_idx), None))
 
         dir_idx = movement_screen_dir(snake.heading_deg, cam)
         hox, hoy = snake.serpentine_world_offset(0)
@@ -188,8 +192,8 @@ class App:
             elif kind == "bubble":
                 scale = args[3] if len(args) > 3 else 1.0
                 draw_bubble(args[0], args[1], args[2], scale)
-            elif kind == "ball":
-                draw_ball(args[0], args[1], args[2])
+            elif kind == "tail":
+                draw_tail(args[0], args[1], args[2])
             elif kind == "head":
                 draw_head(args[0], args[1], args[2], args[3])
             elif kind == "fruit":

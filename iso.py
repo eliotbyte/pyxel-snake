@@ -1,6 +1,6 @@
 import math
 
-from world import WORLD_SIZE, toroidal_delta
+from world import WORLD_SIZE, toroidal_delta, wrap_pos
 
 ISO_X = 4.0
 ISO_Y = 2.0
@@ -118,8 +118,10 @@ def iter_screen_positions(
 
 
 def angle_to_dir(angle_deg: float) -> int:
+    """Map screen angle (0=right, 90=down) to head frame 0=down, clockwise."""
     angle_deg = angle_deg % 360
-    return int((angle_deg + 22.5) // 45) % 8
+    dir_idx = int((90 - angle_deg + 11.25) // 22.5) % 16
+    return (16 - dir_idx) % 16
 
 
 def movement_screen_dir(heading_deg: float, cam_deg: float) -> int:
@@ -135,6 +137,26 @@ def movement_screen_dir(heading_deg: float, cam_deg: float) -> int:
         return 0
     screen_deg = math.degrees(math.atan2(dsy, dsx)) % 360
     return angle_to_dir(screen_deg)
+
+
+def screen_velocity_for_world_heading(
+    heading_deg: float,
+    world_speed: float,
+    wx: float,
+    wy: float,
+    focus_x: float,
+    focus_y: float,
+    cam_deg: float,
+) -> tuple[float, float]:
+    """World motion along heading → screen px/s at the given world position."""
+    rad = math.radians(heading_deg)
+    vwx = math.cos(rad) * world_speed
+    vwy = math.sin(rad) * world_speed
+    sx0, sy0 = world_to_screen_focused(wx, wy, focus_x, focus_y, cam_deg)
+    sx1, sy1 = world_to_screen_focused(
+        (wx + vwx) % WORLD_SIZE, (wy + vwy) % WORLD_SIZE, focus_x, focus_y, cam_deg
+    )
+    return sx1 - sx0, sy1 - sy0
 
 
 def world_velocity_for_screen_velocity(vsx: float, vsy: float, cam_deg: float) -> tuple[float, float]:
@@ -153,10 +175,40 @@ def world_velocity_for_screen_velocity(vsx: float, vsy: float, cam_deg: float) -
     return vwx, vwy
 
 
+def screen_movement_unit(
+    heading_deg: float,
+    wx: float,
+    wy: float,
+    focus_x: float,
+    focus_y: float,
+    cam_deg: float,
+) -> tuple[float, float]:
+    """Unit screen vector for world heading (sprite mirror not applied)."""
+    vsx, vsy = screen_velocity_for_world_heading(heading_deg, 1.0, wx, wy, focus_x, focus_y, cam_deg)
+    speed = math.hypot(vsx, vsy)
+    if speed < 1e-9:
+        return 0.0, 0.0
+    return vsx / speed, vsy / speed
+
+
+def world_pos_screen_ahead(
+    wx: float,
+    wy: float,
+    heading_deg: float,
+    ahead_px: float,
+    focus_x: float,
+    focus_y: float,
+    cam_deg: float,
+) -> tuple[float, float]:
+    """World position offset ahead_px screen pixels along movement direction."""
+    ux, uy = screen_movement_unit(heading_deg, wx, wy, focus_x, focus_y, cam_deg)
+    dwx, dwy = world_velocity_for_screen_velocity(ux * ahead_px, uy * ahead_px, cam_deg)
+    return wrap_pos(wx + dwx, wy + dwy)
+
+
 def mouth_screen_pos(
     head_wx: float, head_wy: float, heading_deg: float, focus_x: float, focus_y: float, cam_deg: float
 ) -> tuple[float, float]:
     hsx, hsy = entity_screen_pos(head_wx, head_wy, focus_x, focus_y, cam_deg)
-    dir_idx = movement_screen_dir(heading_deg, cam_deg)
-    angle = math.radians(dir_idx * 45)
-    return hsx + math.cos(angle) * MOUTH_AHEAD_PX, hsy + math.sin(angle) * MOUTH_AHEAD_PX
+    ux, uy = screen_movement_unit(heading_deg, head_wx, head_wy, focus_x, focus_y, cam_deg)
+    return hsx + ux * MOUTH_AHEAD_PX, hsy + uy * MOUTH_AHEAD_PX

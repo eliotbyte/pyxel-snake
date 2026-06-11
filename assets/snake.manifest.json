@@ -1,0 +1,837 @@
+{
+  "version": 1,
+  "pyxres": "snake.pyxres",
+  "source_config": "sprites/sprites.json",
+  "banks": [
+    {
+      "index": 0,
+      "sheets": [
+        {
+          "id": "snake_head_sheet",
+          "file": "snake_spritesheet.png",
+          "bank": 0,
+          "pack": "tiles",
+          "colkey": 15,
+          "index_remap": [
+            {
+              "from": 0,
+              "to": 15
+            },
+            {
+              "from": 1,
+              "to": 0
+            }
+          ],
+          "index_remap_preset": null,
+          "color_remap": [],
+          "bounds": {
+            "x": 0,
+            "y": 0,
+            "w": 256,
+            "h": 32
+          }
+        },
+        {
+          "id": "snake_tail_sheet",
+          "file": "snake_tail_spritesheet.png",
+          "bank": 0,
+          "pack": "tiles",
+          "colkey": 0,
+          "index_remap": [],
+          "index_remap_preset": null,
+          "color_remap": [],
+          "bounds": {
+            "x": 0,
+            "y": 32,
+            "w": 96,
+            "h": 16
+          }
+        },
+        {
+          "id": "fruits_sheet",
+          "file": "fruits_spritesheet.png",
+          "bank": 0,
+          "pack": "tiles",
+          "colkey": 0,
+          "index_remap": [],
+          "index_remap_preset": null,
+          "color_remap": [],
+          "bounds": {
+            "x": 0,
+            "y": 32,
+            "w": 256,
+            "h": 32
+          }
+        },
+        {
+          "id": "shadows_sheet",
+          "file": "shadows_spritesheet.png",
+          "bank": 0,
+          "pack": "tiles",
+          "colkey": 15,
+          "index_remap": [
+            {
+              "from": 0,
+              "to": 15
+            },
+            {
+              "from": 1,
+              "to": 0
+            }
+          ],
+          "index_remap_preset": null,
+          "color_remap": [],
+          "bounds": {
+            "x": 16,
+            "y": 48,
+            "w": 48,
+            "h": 16
+          }
+        },
+        {
+          "id": "bubble_sheet",
+          "file": "bubble_spritesheet.png",
+          "bank": 0,
+          "pack": "tiles",
+          "colkey": 0,
+          "index_remap": [],
+          "index_remap_preset": null,
+          "color_remap": [],
+          "bounds": {
+            "x": 64,
+            "y": 48,
+            "w": 64,
+            "h": 16
+          }
+        }
+      ]
+    }
+  ],
+  "sprites": {
+    "head_closed_00": {
+      "name": "head_closed_00",
+      "sheet": "snake_head_sheet",
+      "bank": 0,
+      "u": 0,
+      "v": 0,
+      "w": 16,
+      "h": 16,
+      "colkey": 15,
+      "index_remap": []
+    },
+    "head_closed_01": {
+      "name": "head_closed_01",
+      "sheet": "snake_head_sheet",
+      "bank": 0,
+      "u": 16,
+      "v": 0,
+      "w": 16,
+      "h": 16,
+      "colkey": 15,
+      "index_remap": []
+    },
+    "head_closed_02": {
+      "name": "head_closed_02",
+      "sheet": "snake_head_sheet",
+      "bank": 0,
+      "u": 32,
+      "v": 0,
+      "w": 16,
+      "h": 16,
+      "colkey": 15,
+      "index_remap": []
+    },
+    "head_closed_03": {
+      "name": "head_closed_03",
+      "sheet": "snake_head_sheet",
+      "bank": 0,
+      "u": 48,
+      "v": 0,
+      "w": 16,
+      "h": 16,
+      "colkey": 15,
+      "index_remap": []
+    },
+    "head_closed_04": {
+      "name": "head_closed_04",
+      "sheet": "snake_head_sheet",
+      "bank": 0,
+      "u": 64,
+      "v": 0,
+      "w": 16,
+      "h": 16,
+      "colkey": 15,
+      "index_remap": []
+    },
+    "head_closed_05": {
+      "name": "head_closed_05",
+      "sheet": "snake_head_sheet",
+      "bank": 0,
+      "u": 80,
+      "v": 0,
+      "w": 16,
+      "h": 16,
+      "colkey": 15,
+      "index_remap": []
+    },
+    "head_closed_06": {
+      "name": "head_closed_06",
+      "sheet": "snake_head_sheet",
+      "bank": 0,
+      "u": 96,
+      "v": 0,
+      "w": 16,
+      "h": 16,
+      "colkey": 15,
+      "index_remap": []
+    },
+    "head_closed_07": {
+      "name": "head_closed_07",
+      "sheet": "snake_head_sheet",
+      "bank": 0,
+      "u": 112,
+      "v": 0,
+      "w": 16,
+      "h": 16,
+      "colkey": 15,
+      "index_remap": []
+    },
+    "head_closed_08": {
+      "name": "head_closed_08",
+      "sheet": "snake_head_sheet",
+      "bank": 0,
+      "u": 128,
+      "v": 0,
+      "w": 16,
+      "h": 16,
+      "colkey": 15,
+      "index_remap": []
+    },
+    "head_closed_09": {
+      "name": "head_closed_09",
+      "sheet": "snake_head_sheet",
+      "bank": 0,
+      "u": 144,
+      "v": 0,
+      "w": 16,
+      "h": 16,
+      "colkey": 15,
+      "index_remap": []
+    },
+    "head_closed_10": {
+      "name": "head_closed_10",
+      "sheet": "snake_head_sheet",
+      "bank": 0,
+      "u": 160,
+      "v": 0,
+      "w": 16,
+      "h": 16,
+      "colkey": 15,
+      "index_remap": []
+    },
+    "head_closed_11": {
+      "name": "head_closed_11",
+      "sheet": "snake_head_sheet",
+      "bank": 0,
+      "u": 176,
+      "v": 0,
+      "w": 16,
+      "h": 16,
+      "colkey": 15,
+      "index_remap": []
+    },
+    "head_closed_12": {
+      "name": "head_closed_12",
+      "sheet": "snake_head_sheet",
+      "bank": 0,
+      "u": 192,
+      "v": 0,
+      "w": 16,
+      "h": 16,
+      "colkey": 15,
+      "index_remap": []
+    },
+    "head_closed_13": {
+      "name": "head_closed_13",
+      "sheet": "snake_head_sheet",
+      "bank": 0,
+      "u": 208,
+      "v": 0,
+      "w": 16,
+      "h": 16,
+      "colkey": 15,
+      "index_remap": []
+    },
+    "head_closed_14": {
+      "name": "head_closed_14",
+      "sheet": "snake_head_sheet",
+      "bank": 0,
+      "u": 224,
+      "v": 0,
+      "w": 16,
+      "h": 16,
+      "colkey": 15,
+      "index_remap": []
+    },
+    "head_closed_15": {
+      "name": "head_closed_15",
+      "sheet": "snake_head_sheet",
+      "bank": 0,
+      "u": 240,
+      "v": 0,
+      "w": 16,
+      "h": 16,
+      "colkey": 15,
+      "index_remap": []
+    },
+    "head_open_00": {
+      "name": "head_open_00",
+      "sheet": "snake_head_sheet",
+      "bank": 0,
+      "u": 0,
+      "v": 16,
+      "w": 16,
+      "h": 16,
+      "colkey": 15,
+      "index_remap": []
+    },
+    "head_open_01": {
+      "name": "head_open_01",
+      "sheet": "snake_head_sheet",
+      "bank": 0,
+      "u": 16,
+      "v": 16,
+      "w": 16,
+      "h": 16,
+      "colkey": 15,
+      "index_remap": []
+    },
+    "head_open_02": {
+      "name": "head_open_02",
+      "sheet": "snake_head_sheet",
+      "bank": 0,
+      "u": 32,
+      "v": 16,
+      "w": 16,
+      "h": 16,
+      "colkey": 15,
+      "index_remap": []
+    },
+    "head_open_03": {
+      "name": "head_open_03",
+      "sheet": "snake_head_sheet",
+      "bank": 0,
+      "u": 48,
+      "v": 16,
+      "w": 16,
+      "h": 16,
+      "colkey": 15,
+      "index_remap": []
+    },
+    "head_open_04": {
+      "name": "head_open_04",
+      "sheet": "snake_head_sheet",
+      "bank": 0,
+      "u": 64,
+      "v": 16,
+      "w": 16,
+      "h": 16,
+      "colkey": 15,
+      "index_remap": []
+    },
+    "head_open_05": {
+      "name": "head_open_05",
+      "sheet": "snake_head_sheet",
+      "bank": 0,
+      "u": 80,
+      "v": 16,
+      "w": 16,
+      "h": 16,
+      "colkey": 15,
+      "index_remap": []
+    },
+    "head_open_06": {
+      "name": "head_open_06",
+      "sheet": "snake_head_sheet",
+      "bank": 0,
+      "u": 96,
+      "v": 16,
+      "w": 16,
+      "h": 16,
+      "colkey": 15,
+      "index_remap": []
+    },
+    "head_open_07": {
+      "name": "head_open_07",
+      "sheet": "snake_head_sheet",
+      "bank": 0,
+      "u": 112,
+      "v": 16,
+      "w": 16,
+      "h": 16,
+      "colkey": 15,
+      "index_remap": []
+    },
+    "head_open_08": {
+      "name": "head_open_08",
+      "sheet": "snake_head_sheet",
+      "bank": 0,
+      "u": 128,
+      "v": 16,
+      "w": 16,
+      "h": 16,
+      "colkey": 15,
+      "index_remap": []
+    },
+    "head_open_09": {
+      "name": "head_open_09",
+      "sheet": "snake_head_sheet",
+      "bank": 0,
+      "u": 144,
+      "v": 16,
+      "w": 16,
+      "h": 16,
+      "colkey": 15,
+      "index_remap": []
+    },
+    "head_open_10": {
+      "name": "head_open_10",
+      "sheet": "snake_head_sheet",
+      "bank": 0,
+      "u": 160,
+      "v": 16,
+      "w": 16,
+      "h": 16,
+      "colkey": 15,
+      "index_remap": []
+    },
+    "head_open_11": {
+      "name": "head_open_11",
+      "sheet": "snake_head_sheet",
+      "bank": 0,
+      "u": 176,
+      "v": 16,
+      "w": 16,
+      "h": 16,
+      "colkey": 15,
+      "index_remap": []
+    },
+    "head_open_12": {
+      "name": "head_open_12",
+      "sheet": "snake_head_sheet",
+      "bank": 0,
+      "u": 192,
+      "v": 16,
+      "w": 16,
+      "h": 16,
+      "colkey": 15,
+      "index_remap": []
+    },
+    "head_open_13": {
+      "name": "head_open_13",
+      "sheet": "snake_head_sheet",
+      "bank": 0,
+      "u": 208,
+      "v": 16,
+      "w": 16,
+      "h": 16,
+      "colkey": 15,
+      "index_remap": []
+    },
+    "head_open_14": {
+      "name": "head_open_14",
+      "sheet": "snake_head_sheet",
+      "bank": 0,
+      "u": 224,
+      "v": 16,
+      "w": 16,
+      "h": 16,
+      "colkey": 15,
+      "index_remap": []
+    },
+    "head_open_15": {
+      "name": "head_open_15",
+      "sheet": "snake_head_sheet",
+      "bank": 0,
+      "u": 240,
+      "v": 16,
+      "w": 16,
+      "h": 16,
+      "colkey": 15,
+      "index_remap": []
+    },
+    "tail_00": {
+      "name": "tail_00",
+      "sheet": "snake_tail_sheet",
+      "bank": 0,
+      "u": 0,
+      "v": 32,
+      "w": 16,
+      "h": 16,
+      "colkey": 0,
+      "index_remap": []
+    },
+    "tail_01": {
+      "name": "tail_01",
+      "sheet": "snake_tail_sheet",
+      "bank": 0,
+      "u": 16,
+      "v": 32,
+      "w": 16,
+      "h": 16,
+      "colkey": 0,
+      "index_remap": []
+    },
+    "tail_02": {
+      "name": "tail_02",
+      "sheet": "snake_tail_sheet",
+      "bank": 0,
+      "u": 32,
+      "v": 32,
+      "w": 16,
+      "h": 16,
+      "colkey": 0,
+      "index_remap": []
+    },
+    "tail_03": {
+      "name": "tail_03",
+      "sheet": "snake_tail_sheet",
+      "bank": 0,
+      "u": 48,
+      "v": 32,
+      "w": 16,
+      "h": 16,
+      "colkey": 0,
+      "index_remap": []
+    },
+    "tail_04": {
+      "name": "tail_04",
+      "sheet": "snake_tail_sheet",
+      "bank": 0,
+      "u": 64,
+      "v": 32,
+      "w": 16,
+      "h": 16,
+      "colkey": 0,
+      "index_remap": []
+    },
+    "tail_05": {
+      "name": "tail_05",
+      "sheet": "snake_tail_sheet",
+      "bank": 0,
+      "u": 80,
+      "v": 32,
+      "w": 16,
+      "h": 16,
+      "colkey": 0,
+      "index_remap": []
+    },
+    "fruit_eggplant": {
+      "name": "fruit_eggplant",
+      "sheet": "fruits_sheet",
+      "bank": 0,
+      "u": 96,
+      "v": 32,
+      "w": 16,
+      "h": 16,
+      "colkey": 0,
+      "index_remap": []
+    },
+    "fruit_apple": {
+      "name": "fruit_apple",
+      "sheet": "fruits_sheet",
+      "bank": 0,
+      "u": 112,
+      "v": 32,
+      "w": 16,
+      "h": 16,
+      "colkey": 0,
+      "index_remap": []
+    },
+    "fruit_strawberry": {
+      "name": "fruit_strawberry",
+      "sheet": "fruits_sheet",
+      "bank": 0,
+      "u": 128,
+      "v": 32,
+      "w": 16,
+      "h": 16,
+      "colkey": 0,
+      "index_remap": []
+    },
+    "fruit_grape": {
+      "name": "fruit_grape",
+      "sheet": "fruits_sheet",
+      "bank": 0,
+      "u": 144,
+      "v": 32,
+      "w": 16,
+      "h": 16,
+      "colkey": 0,
+      "index_remap": []
+    },
+    "fruit_cherry": {
+      "name": "fruit_cherry",
+      "sheet": "fruits_sheet",
+      "bank": 0,
+      "u": 160,
+      "v": 32,
+      "w": 16,
+      "h": 16,
+      "colkey": 0,
+      "index_remap": []
+    },
+    "fruit_daikon": {
+      "name": "fruit_daikon",
+      "sheet": "fruits_sheet",
+      "bank": 0,
+      "u": 176,
+      "v": 32,
+      "w": 16,
+      "h": 16,
+      "colkey": 0,
+      "index_remap": []
+    },
+    "fruit_radish": {
+      "name": "fruit_radish",
+      "sheet": "fruits_sheet",
+      "bank": 0,
+      "u": 192,
+      "v": 32,
+      "w": 16,
+      "h": 16,
+      "colkey": 0,
+      "index_remap": []
+    },
+    "fruit_watermelon": {
+      "name": "fruit_watermelon",
+      "sheet": "fruits_sheet",
+      "bank": 0,
+      "u": 208,
+      "v": 32,
+      "w": 16,
+      "h": 16,
+      "colkey": 15,
+      "index_remap": [
+        {
+          "from": 0,
+          "to": 15
+        },
+        {
+          "from": 1,
+          "to": 0
+        }
+      ]
+    },
+    "fruit_orange": {
+      "name": "fruit_orange",
+      "sheet": "fruits_sheet",
+      "bank": 0,
+      "u": 224,
+      "v": 32,
+      "w": 16,
+      "h": 16,
+      "colkey": 0,
+      "index_remap": []
+    },
+    "fruit_lemon": {
+      "name": "fruit_lemon",
+      "sheet": "fruits_sheet",
+      "bank": 0,
+      "u": 240,
+      "v": 32,
+      "w": 16,
+      "h": 16,
+      "colkey": 0,
+      "index_remap": []
+    },
+    "fruit_banana": {
+      "name": "fruit_banana",
+      "sheet": "fruits_sheet",
+      "bank": 0,
+      "u": 0,
+      "v": 48,
+      "w": 16,
+      "h": 16,
+      "colkey": 0,
+      "index_remap": []
+    },
+    "shadow_small": {
+      "name": "shadow_small",
+      "sheet": "shadows_sheet",
+      "bank": 0,
+      "u": 16,
+      "v": 48,
+      "w": 16,
+      "h": 16,
+      "colkey": 15,
+      "index_remap": []
+    },
+    "shadow_med": {
+      "name": "shadow_med",
+      "sheet": "shadows_sheet",
+      "bank": 0,
+      "u": 32,
+      "v": 48,
+      "w": 16,
+      "h": 16,
+      "colkey": 15,
+      "index_remap": []
+    },
+    "shadow_big": {
+      "name": "shadow_big",
+      "sheet": "shadows_sheet",
+      "bank": 0,
+      "u": 48,
+      "v": 48,
+      "w": 16,
+      "h": 16,
+      "colkey": 15,
+      "index_remap": []
+    },
+    "bubble_big": {
+      "name": "bubble_big",
+      "sheet": "bubble_sheet",
+      "bank": 0,
+      "u": 64,
+      "v": 48,
+      "w": 16,
+      "h": 16,
+      "colkey": 0,
+      "index_remap": []
+    },
+    "bubble_shrink": {
+      "name": "bubble_shrink",
+      "sheet": "bubble_sheet",
+      "bank": 0,
+      "u": 80,
+      "v": 48,
+      "w": 16,
+      "h": 16,
+      "colkey": 0,
+      "index_remap": []
+    },
+    "bubble_squash": {
+      "name": "bubble_squash",
+      "sheet": "bubble_sheet",
+      "bank": 0,
+      "u": 96,
+      "v": 48,
+      "w": 16,
+      "h": 16,
+      "colkey": 0,
+      "index_remap": []
+    },
+    "bubble_pop": {
+      "name": "bubble_pop",
+      "sheet": "bubble_sheet",
+      "bank": 0,
+      "u": 112,
+      "v": 48,
+      "w": 16,
+      "h": 16,
+      "colkey": 0,
+      "index_remap": []
+    }
+  },
+  "sheets": {
+    "snake_head_sheet": {
+      "id": "snake_head_sheet",
+      "file": "snake_spritesheet.png",
+      "bank": 0,
+      "pack": "tiles",
+      "colkey": 15,
+      "index_remap": [
+        {
+          "from": 0,
+          "to": 15
+        },
+        {
+          "from": 1,
+          "to": 0
+        }
+      ],
+      "index_remap_preset": null,
+      "color_remap": [],
+      "bounds": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 32
+      }
+    },
+    "snake_tail_sheet": {
+      "id": "snake_tail_sheet",
+      "file": "snake_tail_spritesheet.png",
+      "bank": 0,
+      "pack": "tiles",
+      "colkey": 0,
+      "index_remap": [],
+      "index_remap_preset": null,
+      "color_remap": [],
+      "bounds": {
+        "x": 0,
+        "y": 32,
+        "w": 96,
+        "h": 16
+      }
+    },
+    "fruits_sheet": {
+      "id": "fruits_sheet",
+      "file": "fruits_spritesheet.png",
+      "bank": 0,
+      "pack": "tiles",
+      "colkey": 0,
+      "index_remap": [],
+      "index_remap_preset": null,
+      "color_remap": [],
+      "bounds": {
+        "x": 0,
+        "y": 32,
+        "w": 256,
+        "h": 32
+      }
+    },
+    "shadows_sheet": {
+      "id": "shadows_sheet",
+      "file": "shadows_spritesheet.png",
+      "bank": 0,
+      "pack": "tiles",
+      "colkey": 15,
+      "index_remap": [
+        {
+          "from": 0,
+          "to": 15
+        },
+        {
+          "from": 1,
+          "to": 0
+        }
+      ],
+      "index_remap_preset": null,
+      "color_remap": [],
+      "bounds": {
+        "x": 16,
+        "y": 48,
+        "w": 48,
+        "h": 16
+      }
+    },
+    "bubble_sheet": {
+      "id": "bubble_sheet",
+      "file": "bubble_spritesheet.png",
+      "bank": 0,
+      "pack": "tiles",
+      "colkey": 0,
+      "index_remap": [],
+      "index_remap_preset": null,
+      "color_remap": [],
+      "bounds": {
+        "x": 64,
+        "y": 48,
+        "w": 64,
+        "h": 16
+      }
+    }
+  }
+}

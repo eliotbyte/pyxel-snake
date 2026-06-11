@@ -121,7 +121,7 @@ class Bubble:
     def is_active(self) -> bool:
         return not self.removed
 
-    def sprite_idx(self) -> int:
+    def sprite_idx(self) -> str:
         if self.phase == BubblePhase.POP:
             return BUBBLE_POP
         if self.phase == BubblePhase.SQUASH:
